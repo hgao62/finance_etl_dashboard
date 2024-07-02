@@ -3,3 +3,6 @@ https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-salesforce-crm
 
 multi page example
 https://htm-dashboard-uan5l4xr6a-od.a.run.app/
+
+very good one
+https://github.com/mbk-dev/okama-dash

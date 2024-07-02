@@ -25,7 +25,7 @@ TICKER_LIST = get_ticker_list()
 
 app.layout = html.Div(
     [    dmc.Title(
-        "Equity Stocks Analytics", align="center"),
+        "Stocks Analytics", align="center"),
     dmc.Space(h=20),
     dmc.Button("Download Table Data", id="btn_csv"),
     dcc.Download(id="download-dataframe-csv"),

@@ -88,7 +88,10 @@ def generate_top_three_return_bar_charts(stocks, start_date, end_date, first_loa
         domain=[0, 0.5],
     ),
     legend=dict(x=0.029, y=1.038, font_size=10),
-    margin=dict(l=100, r=20, t=70, b=70),
+    # margin=dict(l=100, r=5, t=70, b=70),
+    # automargin=True,
+    autosize = True,
+    # width = 1000,
     paper_bgcolor='rgb(248, 248, 255)',
     plot_bgcolor='rgb(248, 248, 255)',
 )

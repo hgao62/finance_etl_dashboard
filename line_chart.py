@@ -7,6 +7,7 @@ from typing import List
 from datetime import datetime
 from utils import generate_stock_list_str, generate_get_stock_price_sql_string
 import pandas as pd
+import plotly.graph_objects as go
 
 data = px.data.stocks()
 
@@ -30,9 +31,10 @@ def generate_stock_line_chart(stocks,start_date,end_date, first_load):
         sql_string = "SELECT date,close,stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
         stocks = ["AMZN"]
     stock_data_time_series_format = get_stock_price_data(sql_string)
-    stock_line_chart = px.line(data_frame=stock_data_time_series_format, x="date", y=stocks, template="simple_white", title="Stock Price Over Time")
+    
+    stock_line_chart = px.line(data_frame=stock_data_time_series_format, x="date", y=stocks, template="seaborn",title="Stock Price Over Time")
     stock_line_chart.update_layout(
-        margin=dict(t=50, l=25, r=25, b=25), yaxis_title="Price", xaxis_title="Date"
+        margin=dict(t=50, l=25, r=25, b=25), yaxis_title="Price", xaxis_title="Date",legend_title = "Stock"
     )
     return stock_line_chart
 
