@@ -15,4 +15,9 @@ def generate_sector_pie_chart(stocks, start_date, end_date, first_load):
             hole=.3,
             title= "Sector Distribution of Selected Stocks"
             )
+    
+    piechart.update_layout(
+    paper_bgcolor='rgb(248, 248, 255)',
+    plot_bgcolor='rgb(248, 248, 255)',
+)
     return piechart

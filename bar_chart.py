@@ -31,8 +31,8 @@ def get_top_three_cum_return_stocks(stocks_return):
     cumprod_daily_pct_change = (1 + daily_pct_change).cumprod()
 
     cumprod_daily_pct_change.columns = [
-        "_".join([str(index) for index in multi_index])
-        for multi_index in cumprod_daily_pct_change.columns.ravel()
+        
+       multi_index[1] for multi_index in cumprod_daily_pct_change.columns.ravel()
     ]
     cumprod_daily_pct_change = cumprod_daily_pct_change.reset_index()
     max_date = cumprod_daily_pct_change['date'].max()
