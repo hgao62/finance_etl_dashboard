@@ -3,7 +3,8 @@ import dash_mantine_components as dmc
 from dash import Dash, dcc, html, Input, Output, dash_table, callback,State
 import dash_bootstrap_components as dbc
 from db import read_from_sql
-from line_chart import LINE_CHART
+from line_chart import LINE_CHART, generate_stock_line_chart, generate_stock_volume_line_chart
+from bar_chart import generate_top_three_return_bar_charts
 from heading import HEADER
 from dash_id import DashComponentID
 import plotly.express as px
@@ -58,44 +59,24 @@ app.layout = html.Div(
 )]
 )
 
-def generate_get_stock_sql_string(stocks: List[str],start_date:datetime, end_date:datetime) ->str:
-    
-    def _generate_stock_list_str(stocks:List[str]):
-        stocks_with_quote = ["'" + stock + "'" for stock in stocks ]
-        stocks_list_string = ",".join(stocks_with_quote)
-        return stocks_list_string
-    stock_list_sql_format = _generate_stock_list_str(stocks)
-    
-    sql_string = f"select date, close, stock from airflow_db.stock_history where stock in ({stock_list_sql_format}) and date >= '{start_date}' and date<='{end_date}'"
-    return sql_string
 
-def convert_to_time_series_format(data:pd.DataFrame) -> pd.DataFrame:
-    df = data.pivot_table("close",["date"],"stock")
-    df = df.reset_index(0).reset_index(drop=True)
-    return df
-    
+
 
 @callback(
-    Output(DashComponentID.LINE_CHART, "figure"),
+    Output(DashComponentID.PRICE_CHART, "figure"),
+    Output(DashComponentID.VOLUME_CHART, "figure"),
+    Output(DashComponentID.CUM_RETURN_CHART, "figure"),
     State(DashComponentID.DATE_PICKER, "start_date"),
     State(DashComponentID.DATE_PICKER, "end_date"),
     State(DashComponentID.STOCK_DROP_DOWN, "value"),
     Input(DashComponentID.RUN_BTN, "n_clicks"),
   
 )
-def select_stocks(start_date, end_date, stocks:List[str],n_clicks):
-    if n_clicks:
-        sql_string = generate_get_stock_sql_string(stocks, start_date, end_date)
-    else:
-        sql_string = "SELECT date,close,stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
-        stocks= ['AMZN']
-    stock_data = read_from_sql(sql_string)
-    stock_data_time_series_format = convert_to_time_series_format(stock_data)
-    fig = px.line(data_frame=stock_data_time_series_format, x="date", y=stocks, template="simple_white")
-    fig.update_layout(
-        margin=dict(t=50, l=25, r=25, b=25), yaxis_title="Price", xaxis_title="Date"
-    )
-    return fig
+def plot_line_chart(start_date, end_date, stocks:List[str],n_clicks):
+    stock_price_line_chart = generate_stock_line_chart(stocks, start_date, end_date,n_clicks)
+    stock_volume_line_chart = generate_stock_volume_line_chart(stocks, start_date, end_date,n_clicks)
+    stock_cum_return_chart = generate_top_three_return_bar_charts(stocks,start_date,end_date, n_clicks)
+    return stock_price_line_chart, stock_volume_line_chart, stock_cum_return_chart
 
 
 # @callback(
