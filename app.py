@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 from db import read_from_sql
 from line_chart import LINE_CHART, generate_stock_line_chart, generate_stock_volume_line_chart
 from bar_chart import generate_top_three_return_bar_charts
+from pie_chart import generate_sector_pie_chart
 from heading import HEADER
 from dash_id import DashComponentID
 import plotly.express as px
@@ -16,8 +17,8 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_
 
 
 def get_ticker_list():
-    df = read_from_sql("select ticker_name from ticker_list")
-    return list(df["ticker_name"])
+    df = read_from_sql("select distinct stock from airflow_db.stock_history")
+    return list(df["stock"])
 
 TICKER_LIST = get_ticker_list()
 
@@ -66,6 +67,7 @@ app.layout = html.Div(
     Output(DashComponentID.PRICE_CHART, "figure"),
     Output(DashComponentID.VOLUME_CHART, "figure"),
     Output(DashComponentID.CUM_RETURN_CHART, "figure"),
+    Output(DashComponentID.SECTOR_PIE_CHART, "figure"),
     State(DashComponentID.DATE_PICKER, "start_date"),
     State(DashComponentID.DATE_PICKER, "end_date"),
     State(DashComponentID.STOCK_DROP_DOWN, "value"),
@@ -76,7 +78,8 @@ def plot_line_chart(start_date, end_date, stocks:List[str],n_clicks):
     stock_price_line_chart = generate_stock_line_chart(stocks, start_date, end_date,n_clicks)
     stock_volume_line_chart = generate_stock_volume_line_chart(stocks, start_date, end_date,n_clicks)
     stock_cum_return_chart = generate_top_three_return_bar_charts(stocks,start_date,end_date, n_clicks)
-    return stock_price_line_chart, stock_volume_line_chart, stock_cum_return_chart
+    stock_sector_pie_chart = generate_sector_pie_chart(stocks,start_date,end_date,n_clicks)
+    return stock_price_line_chart, stock_volume_line_chart, stock_cum_return_chart,stock_sector_pie_chart
 
 
 # @callback(

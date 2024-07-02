@@ -6,3 +6,4 @@ class DashComponentID:
     PRICE_CHART = "price_chart"
     VOLUME_CHART = "volume_chart"
     CUM_RETURN_CHART = "cum_return_chart"
+    SECTOR_PIE_CHART = "sector_pie_chart"

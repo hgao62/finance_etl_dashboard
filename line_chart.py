@@ -69,7 +69,8 @@ LINE_CHART =dmc.SimpleGrid(
 children=[
     dcc.Graph(id=DashComponentID.PRICE_CHART),
     dcc.Graph(id=DashComponentID.VOLUME_CHART),
-    dcc.Graph(id=DashComponentID.CUM_RETURN_CHART)
+    dcc.Graph(id=DashComponentID.CUM_RETURN_CHART),
+    dcc.Graph(id=DashComponentID.SECTOR_PIE_CHART)
     # dash_table.DataTable(
     #     data.to_dict("records"),
     #     [{"name": i, "id": i} for i in data.columns],
