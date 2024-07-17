@@ -1,6 +1,5 @@
-
 class DashComponentID:
-    DATE_PICKER ="date-picker-select"
+    DATE_PICKER = "date-picker-select"
     RUN_BTN = "btn-run"
     STOCK_DROP_DOWN = "stock-dropdown"
     PRICE_CHART = "price-chart"
@@ -13,3 +12,5 @@ class DashComponentID:
     SECTOR_TABLE = "sector-table"
     DOWNLOAD_DATA_BTN = "btn-download-data"
     ALL_CHARTS = "all-charts"
+    PRICE_TABLE_DOWNLOAD_BUTTON = "price-table-download-button"
+    VOLUME_TABLE_DOWNLOAD_BUTTON = "volume-table-download-button"

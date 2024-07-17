@@ -127,13 +127,24 @@ def plot_line_chart(start_date, end_date, stocks: List[str], n_clicks):
     )
 
 
-# @callback(
-#     Output("download-dataframe-csv", "data"),
-#     Input("btn_csv", "n_clicks"),
-#     prevent_initial_call=True,
-# )
-# def func(n_clicks):
-#     return dcc.send_data_frame(data.to_csv, "mydf.csv")
+@callback(
+    Output(DashComponentID.PRICE_TABLE, "exportDataAsCsv"),
+    Input(DashComponentID.PRICE_TABLE_DOWNLOAD_BUTTON, "n_clicks"),
+)
+def export_price_data_as_csv(n_clicks):
+    if n_clicks:
+        return True
+    return False
+
+
+@callback(
+    Output(DashComponentID.VOLUME_TABLE_TABLE, "exportDataAsCsv"),
+    Input(DashComponentID.VOLUME_TABLE_DOWNLOAD_BUTTON, "n_clicks"),
+)
+def export_volume_data_as_csv(n_clicks):
+    if n_clicks:
+        return True
+    return False
 
 
 if __name__ == "__main__":
