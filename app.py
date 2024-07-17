@@ -39,8 +39,8 @@ app.layout = html.Div(
     [
         dmc.Title("Stocks Analytics", align="center"),
         dmc.Space(h=20),
-        dmc.Button("Download Table Data", id="btn_csv"),
-        dcc.Download(id="download-dataframe-csv"),
+        # dmc.Button("Download Table Data", id="btn_csv"),
+        # dcc.Download(id="download-dataframe-csv"),
         dmc.Space(h=10),
         dmc.MultiSelect(
             label="Select stock you like!",
@@ -68,9 +68,10 @@ app.layout = html.Div(
                         id=DashComponentID.RUN_BTN,
                         children="Run",
                         n_clicks=0,
-                        variant="outline",
+                        size = "md"
+                        # variant="outline",
                     ),
-                    width=3,
+                    width={"size":4}
                 ),
             ]
         ),
@@ -138,7 +139,7 @@ def export_price_data_as_csv(n_clicks):
 
 
 @callback(
-    Output(DashComponentID.VOLUME_TABLE_TABLE, "exportDataAsCsv"),
+    Output(DashComponentID.VOLUME_TABLE, "exportDataAsCsv"),
     Input(DashComponentID.VOLUME_TABLE_DOWNLOAD_BUTTON, "n_clicks"),
 )
 def export_volume_data_as_csv(n_clicks):

@@ -1,5 +1,6 @@
 from dash import Dash, dcc, html, Input, Output, dash_table, callback
 import dash_mantine_components as dmc
+import dash_bootstrap_components as dbc
 import plotly.express as px
 from db import read_from_sql
 from dash_id import DashComponentID
@@ -105,12 +106,16 @@ LINE_CHART = dmc.SimpleGrid(
         dcc.Graph(id=DashComponentID.PRICE_CHART),
         dcc.Graph(id=DashComponentID.VOLUME_CHART),
         # html.Button("Download CSV", id="csv-button", n_clicks=0),
-        dmc.Button(
+        dmc.SimpleGrid(
+            children=[ 
+            dbc.Row(dbc.Col(  dmc.Button(
             "Download Table Data",
             id=DashComponentID.PRICE_TABLE_DOWNLOAD_BUTTON,
             n_clicks=0,
-        ),
-        dag.AgGrid(
+            size = "sm"
+        ),width={"size":2}))
+           , 
+            dag.AgGrid(
             id=DashComponentID.PRICE_TABLE,
             columnSize="sizeToFit",
             columnDefs=STOCK_PRICE_TABLE_FIELD,
@@ -119,13 +124,16 @@ LINE_CHART = dmc.SimpleGrid(
                 "fileName": "price_table.csv",
             },
             dashGridOptions={"pagination": True, "grid-page-size": 10},
-        ),
-        dmc.Button(
+        )],cols=1),
+       
+       dmc.SimpleGrid(children=[
+           dbc.Row(dbc.Col( dmc.Button(
             "Download Table Data",
             id=DashComponentID.VOLUME_TABLE_DOWNLOAD_BUTTON,
             n_clicks=0,
-        ),
-        dag.AgGrid(
+            size = "sm"
+        ), width={"size":2}))
+          , dag.AgGrid(
             id=DashComponentID.VOLUME_TABLE,
             columnSize="sizeToFit",
             columnDefs=STOCK_VOLUME_TABLE_FIELD,
@@ -134,7 +142,9 @@ LINE_CHART = dmc.SimpleGrid(
                 "fileName": "volume_table.csv",
             },
             dashGridOptions={"pagination": True, "grid-page-size": 10},
-        ),
+        )],cols=1)
+        
+       ,
         dcc.Graph(id=DashComponentID.CUM_RETURN_CHART),
         dcc.Graph(id=DashComponentID.SECTOR_PIE_CHART)
         # dash_table.DataTable(
