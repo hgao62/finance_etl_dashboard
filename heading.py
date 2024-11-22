@@ -4,14 +4,7 @@ import dash_core_components as dcc
 from db import read_from_sql
 from datetime import datetime
 from dash_id import DashComponentID
-
-
-def get_ticker_list():
-    df = read_from_sql("select ticker_name from ticker_list")
-    return list(df["ticker_name"])
-
-
-TICKER_LIST = get_ticker_list()
+from cache import TICKER_LIST
 
 HEADER = html.Div(
     [

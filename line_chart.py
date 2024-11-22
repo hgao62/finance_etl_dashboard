@@ -92,15 +92,12 @@ def generate_stock_volume_line_chart_and_underlying_data(
     )
 
 
-def get_ticker_list():
-    df = read_from_sql("select ticker_name from ticker_list")
-    return list(df["ticker_name"])
+
 
 
 STOCK_PRICE_TABLE_COLUMNS = {}
 STOCK_VOLUME_TABLE_COLUMNS = {}
 
-TICKER_LIST = get_ticker_list()
 LINE_CHART = dmc.SimpleGrid(
     children=[
         dcc.Graph(id=DashComponentID.PRICE_CHART),

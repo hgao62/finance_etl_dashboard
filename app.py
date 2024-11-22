@@ -15,6 +15,7 @@ import plotly.express as px
 from typing import List
 from datetime import datetime
 import pandas as pd
+from cache import TICKER_LIST
 
 # The line `import dash_ag_grid as dag` is importing the `dash_ag_grid` library and aliasing it as
 # `dag`. This allows you to refer to the library using the shorter alias `dag` throughout your code
@@ -25,14 +26,6 @@ import dash_ag_grid as dag
 app = Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME]
 )
-
-
-def get_ticker_list():
-    df = read_from_sql("select distinct stock from airflow_db.stock_history")
-    return list(df["stock"])
-
-
-TICKER_LIST = get_ticker_list()
 
 
 app.layout = html.Div(
