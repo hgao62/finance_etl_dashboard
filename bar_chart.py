@@ -23,7 +23,7 @@ def calculate_cumulative_return(stock_history):
 
 def get_top_three_cum_return_stocks(stocks_return):
     """Get top three stocks return up until the latest date available in the data"""
-    cum_returns = pd.pivot_table(stocks_return, columns=["stock"], index=["date"])
+    cum_returns = pd.pivot_table(stocks_return, columns=["Ticker"], index=["Date"])
 
     # compute cumulative returns pct change
     daily_pct_change = cum_returns.pct_change()
@@ -34,12 +34,12 @@ def get_top_three_cum_return_stocks(stocks_return):
         multi_index[1] for multi_index in cumprod_daily_pct_change.columns.ravel()
     ]
     cumprod_daily_pct_change = cumprod_daily_pct_change.reset_index()
-    max_date = cumprod_daily_pct_change["date"].max()
+    max_date = cumprod_daily_pct_change["Date"].max()
     latest_cumprod_change = cumprod_daily_pct_change[
-        cumprod_daily_pct_change["date"] == max_date
+        cumprod_daily_pct_change["Date"] == max_date
     ]
     latest_cumprod_change = latest_cumprod_change.melt(
-        id_vars=["date"], var_name="stock", value_name="cum_return"
+        id_vars=["Date"], var_name="Ticker", value_name="cum_return"
     )
     # rows to column https://stackoverflow.com/questions/28654047/convert-columns-into-rows-with-pandas
     latest_cumprod_change = latest_cumprod_change.round(4)
@@ -58,13 +58,13 @@ def generate_top_three_return_bar_charts(stocks, start_date, end_date, first_loa
     if first_load:
         sql_string = generate_get_stock_price_sql_string(stocks, start_date, end_date)
     else:
-        sql_string = "SELECT date,close,stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
+        sql_string = "SELECT date,close,ticker FROM stocks_price where ticker= 'AMZN' and date >= '2024-01-01'"
         stocks = ["AMZN"]
     price_data = read_from_sql(sql_string)
     # price_data_with_cum_return = calculate_cumulative_return(price_data)
     top_three_stocks_return = get_top_three_cum_return_stocks(price_data)
     x_axis_data = top_three_stocks_return["cum_return"].to_list()
-    y_axis_data = top_three_stocks_return["stock"].to_list()
+    y_axis_data = top_three_stocks_return["Ticker"].to_list()
     fig = go.Figure(
         go.Bar(
             x=x_axis_data,

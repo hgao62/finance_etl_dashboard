@@ -16,17 +16,17 @@ data = px.data.stocks()
 app = Dash(__name__)
 
 STOCK_PRICE_DATA = read_from_sql(
-    "SELECT date,close,stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
+    "SELECT date,close,ticker FROM stocks_price where ticker= 'AMZN' and date >= '2024-01-01'"
 )
 STOCK_VOLUME_DATA = read_from_sql(
-    "SELECT date,volume, stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
+    "SELECT date,volume, ticker FROM stocks_price where ticker= 'AMZN' and date >= '2024-01-01'"
 )
-STOCK_PRICE_TABLE_FIELD = [{"field": "date"}, {"field": "close"}, {"field": "stock"}]
-STOCK_VOLUME_TABLE_FIELD = [{"field": "date"}, {"field": "volume"}, {"field": "stock"}]
+STOCK_PRICE_TABLE_FIELD = [{"field": "Date"}, {"field": "Close"}, {"field": "Ticker"}]
+STOCK_VOLUME_TABLE_FIELD = [{"field": "Date"}, {"field": "Volume"}, {"field": "Ticker"}]
 
 
 def convert_to_time_series_format(data: pd.DataFrame) -> pd.DataFrame:
-    df = data.pivot_table("close", ["date"], "stock")
+    df = data.pivot_table("Close", ["Date"], "Ticker")
     df = df.reset_index(0).reset_index(drop=True)
     return df
 
@@ -43,14 +43,14 @@ def generate_stock_line_chart_and_underlying_data(
     if first_load:
         sql_string = generate_get_stock_price_sql_string(stocks, start_date, end_date)
     else:
-        sql_string = "SELECT date,close,stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
+        sql_string = "SELECT date,close,ticker FROM stocks_price where ticker= 'AMZN' and date >= '2024-01-01'"
         stocks = ["AMZN"]
     # stock_data_time_series_format = get_stock_price_data(sql_string)
     stock_data = read_from_sql(sql_string)
     stock_data_time_series_format = convert_to_time_series_format(stock_data)
     stock_line_chart = px.line(
         data_frame=stock_data_time_series_format,
-        x="date",
+        x="Date",
         y=stocks,
         template="seaborn",
         title="Stock Price Over Time",
@@ -66,7 +66,7 @@ def generate_stock_line_chart_and_underlying_data(
 
 def generate_stock_volume_string(stocks, start_date, end_date):
     stock_list_sql_format = generate_stock_list_str(stocks)
-    sql_string = f"select date,volume, stock from airflow_db.stock_history where stock in ({stock_list_sql_format}) and date >= '{start_date}' and date<='{end_date}'"
+    sql_string = f"select date,volume, ticker from stocks_price where ticker in ({stock_list_sql_format}) and date >= '{start_date}' and date<='{end_date}'"
     return sql_string
 
 
@@ -76,16 +76,16 @@ def generate_stock_volume_line_chart_and_underlying_data(
     if first_load:
         sql_string = generate_stock_volume_string(stocks, start_date, end_date)
     else:
-        sql_string = "SELECT date,volume, stock FROM airflow_db.stock_history where stock= 'AMZN' and date >= '2024-01-01'"
+        sql_string = "SELECT date,volume, ticker FROM stocks_price where ticker= 'AMZN' and date >= '2024-01-01'"
         stocks = ["AMZN"]
     stock_volumes_data = read_from_sql(sql_string)
     return (
         px.line(
-            stock_volumes_data.sort_values(by=["date"], ascending=[True]),
-            x="date",
-            y="volume",
-            color="stock",
-            facet_col="stock",
+            stock_volumes_data.sort_values(by=["Date"], ascending=[True]),
+            x="Date",
+            y="Volume",
+            color="Ticker",
+            facet_col="Ticker",
             title="Volume Traded Over Time",
         ),
         stock_volumes_data,

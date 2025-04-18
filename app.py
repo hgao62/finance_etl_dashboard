@@ -1,7 +1,6 @@
 import dash_mantine_components as dmc
-from dash import Dash, dcc, html, Input, Output, dash_table, callback, State
+from dash import Dash, dcc, html, Input, Output, callback, State
 import dash_bootstrap_components as dbc
-from db import read_from_sql
 from line_chart import (
     LINE_CHART,
     generate_stock_line_chart_and_underlying_data,
@@ -9,19 +8,11 @@ from line_chart import (
 )
 from bar_chart import generate_top_three_return_bar_charts
 from pie_chart import generate_sector_pie_chart
-from heading import HEADER
 from dash_id import DashComponentID
-import plotly.express as px
 from typing import List
 from datetime import datetime
-import pandas as pd
 from cache import TICKER_LIST
 
-# The line `import dash_ag_grid as dag` is importing the `dash_ag_grid` library and aliasing it as
-# `dag`. This allows you to refer to the library using the shorter alias `dag` throughout your code
-# instead of typing out the full library name `dash_ag_grid`. This can make your code more concise and
-# easier to read.
-import dash_ag_grid as dag
 
 app = Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME]

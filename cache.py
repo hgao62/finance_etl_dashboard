@@ -13,8 +13,8 @@ class Cache:
     
     def get_ticker_list(self):
         if not self.ticker_list:
-            df = read_from_sql("select distinct stock from airflow_db.stock_history")
-            self.ticker_list = list(df["stock"])
+            df = read_from_sql("select distinct ticker from stocks_price")
+            self.ticker_list = list(df["Ticker"])
         return self.ticker_list
     
 
