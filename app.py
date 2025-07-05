@@ -23,8 +23,6 @@ app.layout = html.Div(
     [
         dmc.Title("Stocks Analytics", align="center"),
         dmc.Space(h=20),
-        # dmc.Button("Download Table Data", id="btn_csv"),
-        # dcc.Download(id="download-dataframe-csv"),
         dmc.Space(h=10),
         dmc.MultiSelect(
             label="Select stock you like!",
@@ -45,7 +43,7 @@ app.layout = html.Div(
                         max_date_allowed=datetime.today().date(),
                         initial_visible_month=datetime(2024, 1, 1).date(),
                     ),
-                    width=2,
+                    width=4,
                 ),
                 dbc.Col(
                     dmc.Button(
@@ -53,7 +51,6 @@ app.layout = html.Div(
                         children="Run",
                         n_clicks=0,
                         size = "md"
-                        # variant="outline",
                     ),
                     width={"size":4}
                 ),
